@@ -2,15 +2,18 @@
 
 namespace App\Models;
 
+use Illuminate\Auth\MustVerifyEmail;
+use Illuminate\Contracts\Auth\MustVerifyEmail as MustVerifyEmailContract;
 use Illuminate\Database\Eloquent\Builder;
 use Illuminate\Database\Eloquent\Relations\belongsToMany;
 use Illuminate\Database\Eloquent\Relations\HasMany;
 use Illuminate\Foundation\Auth\User as Authenticatable;
 use Illuminate\Notifications\Notifiable;
+use Illuminate\Support\Str;
 
-class User extends Authenticatable
+class User extends Authenticatable implements MustVerifyEmailContract
 {
-    use Notifiable;
+    use MustVerifyEmail, Notifiable;
 
     /**
      * The attributes that are mass assignable.
@@ -44,7 +47,7 @@ class User extends Authenticatable
      */
     public function getFullnameAttribute(): string
     {
-        return title_case($this->name);
+        return Str::title($this->name);
     }
 
     /**
@@ -52,7 +55,7 @@ class User extends Authenticatable
      */
     public function scopeLastWeek(Builder $query): Builder
     {
-        return $query->whereBetween('registered_at', [now()->subWeek(), now()])
+        return $query->whereBetween('registered_at', [carbon('1 week ago'), now()])
                      ->latest();
     }
 

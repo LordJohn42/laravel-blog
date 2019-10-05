@@ -7,6 +7,7 @@ use App\Models\Comment;
 use App\Models\Post;
 use App\Models\User;
 use Illuminate\Foundation\Testing\RefreshDatabase;
+use Illuminate\Support\Str;
 use Tests\TestCase;
 
 class CommentTest extends TestCase
@@ -20,13 +21,13 @@ class CommentTest extends TestCase
 
         $this->actingAsAdmin()
             ->get('/admin/comments')
-            ->assertStatus(200)
+            ->assertOk()
             ->assertSee('1 comment')
             ->assertSee('Anakin')
             ->assertSee('Content')
             ->assertSee('Author')
             ->assertSee('Posted at')
-            ->assertSee(e(str_limit($comment->content, 50)));
+            ->assertSee(e(Str::limit($comment->content, 50)));
     }
 
     public function testEdit()
@@ -36,7 +37,7 @@ class CommentTest extends TestCase
 
         $this->actingAsAdmin()
             ->get("/admin/comments/{$comment->id}/edit")
-            ->assertStatus(200)
+            ->assertOk()
             ->assertSee('Anakin')
             ->assertSee('Show post :')
             ->assertSee(route('posts.show', $comment->post))

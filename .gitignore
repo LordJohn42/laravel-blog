@@ -4,6 +4,7 @@
 /public/css
 /public/fonts
 /public/js
+/public/mix-manifest.json
 public/media/
 /vendor
 /.idea
@@ -14,3 +15,4 @@ public/media/
 /storage/tmp
 /storage/medialibrary
 /log
+.phpunit.result.cache

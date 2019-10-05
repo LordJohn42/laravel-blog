@@ -21,7 +21,7 @@ class UserTest extends TestCase
 
         $this->actingAs($user)
             ->get("/users/{$user->id}")
-            ->assertStatus(200)
+            ->assertOk()
             ->assertSee(e($user->name))
             ->assertSee(e($user->email))
             ->assertSee('Comments')
@@ -41,7 +41,7 @@ class UserTest extends TestCase
 
         $this->actingAs($user)
             ->get('/settings/account')
-            ->assertStatus(200)
+            ->assertOk()
             ->assertSee('My profile')
             ->assertSee('My public profile')
             ->assertSee($user->name)
@@ -65,7 +65,7 @@ class UserTest extends TestCase
 
     public function testUpdatePassword()
     {
-        $user = $this->user(['password' => bcrypt('4_n3w_h0p3')]);
+        $user = $this->user(['password' => Hash::make('4_n3w_h0p3')]);
         $params = $this->validPasswordParams();
 
         $this->actingAs($user)
@@ -78,7 +78,7 @@ class UserTest extends TestCase
 
     public function testUpdatePasswordFail()
     {
-        $user = $this->user(['password' => bcrypt('4_n3w_h0p3')]);
+        $user = $this->user(['password' => Hash::make('4_n3w_h0p3')]);
         $params = $this->validPasswordParams(['current_password' => '7h3_l457_j3d1']);
 
         $this->actingAs($user)
